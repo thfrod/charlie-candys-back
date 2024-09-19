@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -15,11 +17,19 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        if (Auth::attempt($request->only('email', 'password'))) {
+        $user = User::where('USUARIO_EMAIL', $request->email)->first();
+
+        if ($user && Hash::check($request->password, $user->USUARIO_SENHA)) {
+
+            $token = Hash::make(env('HASH_PASSOWRD') . $user->USUARIO_ID);
+
+            $response = [
+                'token' => $token,
+            ];
             return $this->response(
                 Response::$statusTexts[Response::HTTP_OK],
                 Response::HTTP_OK,
-                ['token' => $request->user()->createToken('charlie-candys')->plainTextToken]
+                $response
             );
         } else {
             return $this->response(Response::$statusTexts[Response::HTTP_FORBIDDEN], Response::HTTP_FORBIDDEN);
