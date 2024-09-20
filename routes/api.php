@@ -12,4 +12,4 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/products', [ProdutoController::class, 'index']);
+Route::get('/produtos', [ProdutoController::class, 'index']);
