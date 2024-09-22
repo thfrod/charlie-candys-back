@@ -26,6 +26,7 @@ class AuthController extends Controller
             $response = [
                 'token' => $token,
             ];
+
             return $this->response(
                 Response::$statusTexts[Response::HTTP_OK],
                 Response::HTTP_OK,
